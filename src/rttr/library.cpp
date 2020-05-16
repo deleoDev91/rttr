@@ -109,10 +109,9 @@ class library_manager
 /////////////////////////////////////////////////////////////////////////////////////////
 
 library::library(string_view file_name, string_view version)
-:   m_pimpl(detail::library_manager::create_or_find_library(file_name, version)),
-    m_is_loaded(false)
+:   m_pimpl(detail::library_manager::create_or_find_library(file_name, version))
 {
-
+	m_is_loaded = m_pimpl->is_loaded();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -132,8 +131,9 @@ bool library::load()
     if (m_is_loaded)
         return m_pimpl->is_loaded();
 
-    m_is_loaded = true;
-    return m_pimpl->load();
+	bool result = m_pimpl->load();
+    m_is_loaded = m_pimpl->is_loaded();
+    return result;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -142,8 +142,9 @@ bool library::unload()
 {
     if (m_is_loaded)
     {
-        m_is_loaded = false;
-        return m_pimpl->unload();
+		bool result = m_pimpl->unload();
+        m_is_loaded = m_pimpl->is_loaded();
+        return result;
     }
     else
     {
@@ -155,7 +156,7 @@ bool library::unload()
 
 bool library::is_loaded() const RTTR_NOEXCEPT
 {
-    return m_pimpl->is_loaded();
+    return m_is_loaded;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
