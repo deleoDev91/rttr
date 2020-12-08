@@ -210,6 +210,13 @@ variant constructor_wrapper_base::invoke_variadic(std::vector<argument>& args) c
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
+variant constructor_wrapper_base::invoke_allocated_variadic(void* pos, std::vector<argument>& args) const
+{
+	return invoke_variadic(args);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 void constructor_wrapper_base::visit(visitor& visitor, const constructor& ctor) const RTTR_NOEXCEPT
 {
 }

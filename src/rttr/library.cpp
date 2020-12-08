@@ -143,7 +143,7 @@ bool library::unload()
     if (m_is_loaded)
     {
 		bool result = m_pimpl->unload();
-        m_is_loaded = m_pimpl->is_loaded();
+        m_is_loaded = false;
         return result;
     }
     else
