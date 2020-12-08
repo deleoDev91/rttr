@@ -204,6 +204,21 @@ variant type::create(vector<argument> args) const
     return variant();
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+variant type::create_allocated(void* pos, vector<argument> args) const
+{
+	auto& ctors = m_type_data->m_class_data.m_ctors;
+	for (const auto& ctor : ctors)
+	{
+		if (detail::compare_with_arg_list::compare(ctor.get_parameter_infos(), args))
+			return ctor.invoke_allocated_variadic(pos, std::move(args));
+	}
+
+	return variant();
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////
 
 bool type::destroy(variant& obj) const RTTR_NOEXCEPT
