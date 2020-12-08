@@ -214,6 +214,25 @@ TEST_CASE("constructor - invoke general", "[constructor]")
 
         CHECK(t.get_destructor().invoke(var) == true);
     }
+
+	SECTION("invoke allocated ctor")
+	{
+		auto test_type = type::get<ctor_invoke_test>();
+		auto range = test_type.get_constructors();
+		std::vector<constructor> ctor_list(range.cbegin(), range.cend());
+		REQUIRE(ctor_list.size() == 11);
+
+		constexpr auto align = sizeof(void*);
+		auto sizeToAlloc = (test_type.get_sizeof() + align - 1) & ~(align - 1);
+
+		char* buffer = new char[sizeToAlloc];
+		variant var = ctor_list[6].invoke_allocated_variadic(buffer, std::vector<rttr::argument>());
+
+		CHECK(var.is_valid() == true);
+		CHECK(var.get_type() == type::get<ctor_invoke_test*>());
+
+		CHECK(reinterpret_cast<char*>(var.convert<ctor_invoke_test*>()) == buffer);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
