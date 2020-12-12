@@ -112,6 +112,13 @@ class RTTR_API destructor
          */
         bool invoke(variant& obj) const RTTR_NOEXCEPT;
 
+		/*!
+		* \brief Calls destructor method without destroying caller. Usefull for custom low level allocations.
+		*
+		* \return True if the destructor of the object could be invoked, otherwise false.
+		*/
+		bool invoke_method(variant& obj) const RTTR_NOEXCEPT;
+
         /*!
          * \brief Returns true if this destructor is the same like the \p other.
          *

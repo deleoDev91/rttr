@@ -526,6 +526,23 @@ static RTTR_INLINE T& identity_func(T& func) { return func; }
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
+//Invokes class destructor if it is necessary
+template<typename T>
+inline typename std::enable_if<!std::is_trivially_destructible<T>::value>::type
+invoke_destructor(T* object)
+{
+	object->~T();
+}
+
+template<typename T>
+inline typename std::enable_if<std::is_trivially_destructible<T>::value>::type
+invoke_destructor(T* object)
+{
+	object;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 } // end namespace detail
 } // end namespace rttr
 

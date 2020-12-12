@@ -231,6 +231,7 @@ TEST_CASE("constructor - invoke general", "[constructor]")
 		CHECK(var.is_valid() == true);
 		CHECK(var.get_type() == type::get<ctor_invoke_test*>());
 
+		// new(buffer) ctor_invoke_test()
 		CHECK(reinterpret_cast<char*>(var.convert<ctor_invoke_test*>()) == buffer);
 	}
 }
