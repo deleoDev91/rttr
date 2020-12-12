@@ -63,6 +63,19 @@ class destructor_wrapper : public destructor_wrapper_base
                 return false;
             }
         }
+
+		bool invoke_method_only(variant& obj) const RTTR_NOEXCEPT
+		{
+			if (obj.is_type<ClassType*>())
+			{
+				detail::invoke_destructor(obj.get_value<ClassType*>());
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 };
 
 } // end namespace detail
