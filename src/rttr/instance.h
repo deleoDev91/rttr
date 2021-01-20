@@ -68,6 +68,11 @@ public:
      */
     RTTR_INLINE instance(const instance& other) RTTR_NOEXCEPT;
 
+	/*!
+	* \brief Move constructor for an instance.
+	*/
+	RTTR_INLINE instance(instance&& other) RTTR_NOEXCEPT;
+
     /*!
      * \brief Creates an instance object from type \p T.
      *
@@ -146,8 +151,17 @@ public:
      */
     RTTR_INLINE type get_derived_type() const RTTR_NOEXCEPT;
 
+	/*!
+	* \brief Copy an instance.
+	*/
+	RTTR_INLINE instance& operator=(const instance& other) RTTR_NOEXCEPT;
+
+	/*!
+	* \brief Move an instance.
+	*/
+	RTTR_INLINE instance& operator=(instance&& other) RTTR_NOEXCEPT;
+
 private:
-    instance& operator=(const instance& other) RTTR_NOEXCEPT;
 
     detail::data_address_container m_data_container;
 };
