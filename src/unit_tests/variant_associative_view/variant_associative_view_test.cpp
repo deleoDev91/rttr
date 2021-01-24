@@ -307,7 +307,7 @@ TEST_CASE("variant_associative_view::insert", "[variant_associative_view]")
         REQUIRE(ret.first != view.end());
 
         CHECK(ret.first.get_key().to_int() == 1);
-        CHECK(ret.first.get_value().is_valid() == false);
+        CHECK(ret.first.get_value().is_valid() == true);
         CHECK(ret.second == true);
 
         ret = view.insert(std::string("one"));
