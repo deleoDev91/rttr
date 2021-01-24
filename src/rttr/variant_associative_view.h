@@ -226,6 +226,13 @@ class RTTR_API variant_associative_view
          */
         std::size_t erase(argument key);
 
+		/*!
+		* \brief Changes the element witch matches with key. Keep in mind that the function uses find to get the element that is going to be altered.
+		*
+		* \return If the element was overwritten
+		*/
+		bool set_value(argument key, argument value);
+
         /*!
          * \brief Removes all elements from the container.
          *

@@ -64,7 +64,8 @@ class RTTR_LOCAL variant_associative_view_private
             m_clear_func(associative_container_empty::clear),
             m_equal_range_func(associative_container_empty::equal_range),
             m_insert_func_key(associative_container_empty::insert_key),
-            m_insert_func_key_value(associative_container_empty::insert_key_value)
+            m_insert_func_key_value(associative_container_empty::insert_key_value),
+			m_set_value_func(associative_container_empty::set_value)
         {
         }
 
@@ -91,7 +92,8 @@ class RTTR_LOCAL variant_associative_view_private
             m_clear_func(associative_container_mapper_wrapper<RawType, ConstType>::clear),
             m_equal_range_func(associative_container_mapper_wrapper<RawType, ConstType>::equal_range),
             m_insert_func_key(associative_container_mapper_wrapper<RawType, ConstType>::insert_key),
-            m_insert_func_key_value(associative_container_mapper_wrapper<RawType, ConstType>::insert_key_value)
+            m_insert_func_key_value(associative_container_mapper_wrapper<RawType, ConstType>::insert_key_value),
+			m_set_value_func(associative_container_mapper_wrapper<RawType, ConstType>::set_value)
         {
         }
 
@@ -204,6 +206,11 @@ class RTTR_LOCAL variant_associative_view_private
             return m_insert_func_key_value(m_container, key, value, itr);
         }
 
+		RTTR_INLINE bool set_value(argument& key, argument& value) 
+		{
+			return m_set_value_func(m_container, key, value);
+		}
+
     private:
         static bool equal_cmp_dummy_func(const iterator_data& lhs_itr, const iterator_data& rhs_itr) RTTR_NOEXCEPT;
         using equality_func     = decltype(&equal_cmp_dummy_func); // workaround because of 'noexcept' can only appear on function declaration
@@ -217,6 +224,7 @@ class RTTR_LOCAL variant_associative_view_private
         using delete_func       = void(*)(iterator_data& itr);
         using get_key_func      = variant (*)(const iterator_data& itr);
         using get_value_func    = variant (*)(const iterator_data& itr);
+		using set_value_func	= bool(*)(void* container, argument& key, argument& value);
         using clear_func        = void(*)(void* container);
         using erase_func        = std::size_t(*)(void* container, argument& key);
         using find_func         = void(*)(void* container, detail::iterator_data& itr, argument& key);
@@ -238,6 +246,7 @@ class RTTR_LOCAL variant_associative_view_private
         delete_func             m_delete_func;
         get_key_func            m_get_key_func;
         get_value_func          m_get_value_func;
+		set_value_func			m_set_value_func;
         advance_func            m_advance_func;
         find_func               m_find_func;
         erase_func              m_erase_func;

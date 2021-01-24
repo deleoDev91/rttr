@@ -169,6 +169,13 @@ std::size_t variant_associative_view::erase(argument key)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
+bool variant_associative_view::set_value(argument key, argument value)
+{
+	return m_view.set_value(key, value);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 void variant_associative_view::clear()
 {
     m_view.clear();
