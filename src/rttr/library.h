@@ -210,6 +210,14 @@ public:
       */
      array_range<method> get_global_methods() const RTTR_NOEXCEPT;
 
+	 /*!
+	 * \brief Checks if library is the same
+	 *
+	 * \return true if library is same as compared one, otherwise false
+	 */
+	 bool operator==(const library &other) const RTTR_NOEXCEPT;
+	 
+
 private:
     std::shared_ptr<detail::library_private> m_pimpl;
     bool                                     m_is_loaded;
