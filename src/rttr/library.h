@@ -123,6 +123,9 @@ public:
     library(const library&) = delete;
     library& operator=(const library&) = delete;
 
+	library(library&& other);
+	library& operator=(library&& other);
+
      /*!
       * \brief Loads the library and returns `true`; otherwise `false.`
       *        When the library could not be loaded, check the \ref get_error_string() "error string".
