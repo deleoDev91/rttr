@@ -116,6 +116,14 @@ library::library(string_view file_name, string_view version)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
+library::library(library&& other)
+{
+	m_is_loaded = other.m_is_loaded;
+	m_pimpl = std::move(other.m_pimpl);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 library::~library()
 {
     // the library_manager holds an instance too, so the use_count is always >= 2
@@ -193,6 +201,15 @@ array_range<property> library::get_global_properties() const RTTR_NOEXCEPT
 array_range<method> library::get_global_methods() const RTTR_NOEXCEPT
 {
     return m_pimpl->get_global_methods();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+library& library::operator=(library&& other)
+{
+	m_pimpl = std::move(other.m_pimpl);
+	m_is_loaded = other.m_is_loaded;
+	return *this;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
