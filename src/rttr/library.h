@@ -100,6 +100,8 @@ class RTTR_API library
 {
 public:
 
+	library() = default;
+
     /*!
      * \brief Constructs a library instance that will load the given library \p `file_name` and
      *        an optional version number \p version.
