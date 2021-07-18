@@ -76,6 +76,11 @@ class destructor_wrapper : public destructor_wrapper_base
 				return false;
 			}
 		}
+
+		virtual bool is_trivially_destructible() const RTTR_NOEXCEPT
+		{
+			return std::is_trivially_destructible<ClassType>::value;
+		}
 };
 
 } // end namespace detail

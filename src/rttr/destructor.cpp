@@ -103,6 +103,13 @@ bool destructor::invoke_method(variant& obj) const RTTR_NOEXCEPT
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
+bool destructor::is_trivially_destructible() const RTTR_NOEXCEPT
+{
+	return m_wrapper->is_trivially_destructible();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 bool destructor::operator==(const destructor& other) const RTTR_NOEXCEPT
 {
     return (m_wrapper == other.m_wrapper);

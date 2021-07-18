@@ -119,6 +119,13 @@ class RTTR_API destructor
 		*/
 		bool invoke_method(variant& obj) const RTTR_NOEXCEPT;
 
+		/*!
+		* \brief Checks if type has a destructor that must be called on memory free.
+		*
+		* \return True if the destructor can be ignored (is trivially destructible).
+		*/
+		bool is_trivially_destructible() const RTTR_NOEXCEPT;
+
         /*!
          * \brief Returns true if this destructor is the same like the \p other.
          *
