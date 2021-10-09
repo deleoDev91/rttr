@@ -72,10 +72,19 @@ struct associative_container_mapper_wrapper : iterator_wrapper_base<Tp>
         return variant(std::ref(base_class::get_key(it)));
     }
 
-    static variant get_value(const iterator_data& itr)
+    template<typename..., typename V = value_t, enable_if_t<!std::is_void<V>::value, int> = 0>
+    static variant
+    get_value(const iterator_data& itr)
     {
         auto& it = itr_wrapper::get_iterator(itr);
         return variant(std::ref(base_class::get_value(it)));
+    }
+
+    template<typename..., typename V = value_t, enable_if_t<std::is_void<V>::value, int> = 0>
+    static variant
+    get_value(const iterator_data& itr)
+    {
+        return variant();
     }
 
     static void begin(void* container, iterator_data& itr)
@@ -210,19 +219,6 @@ struct associative_container_mapper_wrapper : iterator_wrapper_base<Tp>
         return false;
     }
 
-	/////////////////////////////////////////////////////////////////////////
-
-	template<typename..., typename C = ConstType, enable_if_t<!std::is_const<C>::value, int> = 0>
-	static bool set_value(void* container, argument& key, argument& value)
-	{
-		return base_class::set_value(get_container(container), key, value);
-	}
-
-	template<typename..., typename C = ConstType, enable_if_t<std::is_const<C>::value, int> = 0>
-	static bool set_value(void* container, argument& key, argument& value)
-	{
-		return false;
-	}
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -343,30 +339,6 @@ struct associative_container_map_base : associative_container_base<T>
     {
         return container.insert(std::make_pair(key, value));
     }
-
-	template<typename..., typename V = value_t, enable_if_t<!std::is_const<V>::value, int> = 0>
-	static bool set_value_impl(container_t& container, const key_t& key, value_t& value)
-	{
-		itr_t itr = container.find(key);
-		if (itr != container.end())
-		{
-			itr->second = value;
-			return true;
-		}
-		return false;
-	}
-
-	template<typename..., typename V = value_t, enable_if_t<std::is_const<V>::value, int> = 0>
-	static bool set_value_impl(container_t& container, const key_t& key, value_t& value)
-	{
-		return false;
-	}
-
-	static bool set_value(container_t& container, argument& key, argument& value)
-	{
-		return set_value_impl(container, key.get_value<key_t>(), value.get_value<value_t>());
-	}
-	
 };
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -385,32 +357,10 @@ struct associative_container_key_base : associative_container_base<T>
         return *itr;
     }
 
-	static const key_t& get_value(const const_itr_t& itr)
-	{
-		return *itr;
-	}
-
     static std::pair<itr_t, bool> insert_key(container_t& container, const key_t& key)
     {
         return container.insert(key);
     }
-
-	static bool set_value(container_t& container, argument& key, argument& value)
-	{
-		return set_value_impl(container, key.get_value<key_t>(), value.get_value<key_t>());
-	}
-
-	static bool set_value_impl(container_t& container, key_t& key, key_t& value)
-	{
-		auto itr = container.find(key);
-		if (itr != container.end())
-		{
-			container.erase(itr);
-			container.insert(value);
-			return true;
-		}
-		return false;
-	}
 };
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -438,31 +388,6 @@ struct associative_container_base_multi : associative_container_base<T>
     {
         return {container.insert(std::make_pair(key, value)), true};
     }
-
-	template<typename..., typename V = value_t, enable_if_t<!std::is_const<V>::value, int> = 0>
-	static bool set_value_impl(container_t& container, key_t& key, value_t& value)
-	{
-		itr_t itr = container.find(key);
-		if (itr != container.end())
-		{
-			itr->second = value;
-			return true;
-		}
-		return false;
-	}
-
-	template<typename..., typename V = value_t, enable_if_t<std::is_const<V>::value, int> = 0>
-	static bool set_value_impl(container_t& container, const key_t& key, value_t& value)
-	{
-		return false;
-	}
-
-	static bool set_value(container_t& container, argument& key, argument& value)
-	{
-		return set_value_impl(container, key.get_value<key_t>(), value.get_value<value_t>());
-	}
-
-	
 };
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -601,11 +526,6 @@ struct associative_container_empty
     {
         return false;
     }
-
-	static bool set_value(void* container, argument& key, argument& value)
-	{
-		return false;
-	}
 };
 
 } // end namespace detail
