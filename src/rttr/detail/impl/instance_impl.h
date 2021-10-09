@@ -60,6 +60,13 @@ RTTR_INLINE instance::instance(const instance& other) RTTR_NOEXCEPT
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
+RTTR_INLINE instance::instance(instance&& other) RTTR_NOEXCEPT
+	: m_data_container(other.m_data_container)
+{
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 template<typename T, typename Tp>
 RTTR_INLINE instance::instance(T& data) RTTR_NOEXCEPT
 :   m_data_container(detail::data_address_container{
@@ -115,6 +122,12 @@ RTTR_INLINE type instance::get_derived_type() const RTTR_NOEXCEPT
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
+
+RTTR_INLINE instance& instance::operator=(const instance& other) RTTR_NOEXCEPT { m_data_container.copy(other.m_data_container); return *this; }
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+RTTR_INLINE instance& instance::operator=(instance&& other) RTTR_NOEXCEPT { m_data_container.move(other.m_data_container); return *this; }
 
 } // end namespace rttr
 

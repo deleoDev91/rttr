@@ -180,6 +180,27 @@ TEST_CASE("library - multi load", "[library]")
         CHECK(lib.unload() == true);
         CHECK(does_plugin_type_exist() == false);
     }
+
+	SECTION("load and unload the same lib in different scopes")
+	{
+		{
+			library lib(library_name);
+
+			CHECK(does_plugin_type_exist() == false);
+
+			CHECK(lib.load() == true);
+			CHECK(does_plugin_type_exist() == true);
+		}
+
+		{
+			library lib2(library_name);
+
+			CHECK(does_plugin_type_exist() == true);
+			CHECK(lib2.unload() == true);
+
+			CHECK(does_plugin_type_exist() == false);
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

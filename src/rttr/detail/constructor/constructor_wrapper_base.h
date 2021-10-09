@@ -81,6 +81,7 @@ class RTTR_API constructor_wrapper_base
                                argument& arg5, argument& arg6) const;
 
         virtual variant invoke_variadic(std::vector<argument>& args) const;
+		virtual variant invoke_allocated_variadic(void* pos, std::vector<argument>& args) const;
 
         virtual void visit(visitor& visitor, const constructor& ctor) const RTTR_NOEXCEPT;
     protected:

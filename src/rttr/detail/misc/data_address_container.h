@@ -46,10 +46,53 @@ namespace detail
  */
 struct data_address_container
 {
-    type    m_type;
+	type    m_type;
     type    m_wrapped_type;
     void*   m_data_address;
     void*   m_data_address_wrapped_type;
+
+	/*~data_address_container() = default;
+
+	data_address_container(const data_address_container &other)
+	{
+		m_type = other.m_type;
+		m_wrapped_type = other.m_wrapped_type;
+
+		m_data_address = other.m_data_address;
+		m_data_address_wrapped_type = other.m_data_address_wrapped_type;
+	}
+
+	data_address_container(data_address_container&& other)
+	{
+		std::swap(m_type, other.m_type);
+		std::swap(m_wrapped_type, other.m_wrapped_type);
+
+		std::swap(m_data_address, other.m_data_address);
+		std::swap(m_data_address_wrapped_type, other.m_data_address_wrapped_type);
+	}*/
+
+	data_address_container& copy(const data_address_container &other)
+	{
+		m_type = other.m_type;
+		m_wrapped_type = other.m_wrapped_type;
+
+		m_data_address = other.m_data_address;
+		m_data_address_wrapped_type = other.m_data_address_wrapped_type;
+
+		return *this;
+	}
+
+	data_address_container& move(data_address_container& other)
+	{
+		std::swap(m_type, other.m_type);
+		std::swap(m_wrapped_type, other.m_wrapped_type);
+
+		std::swap(m_data_address, other.m_data_address);
+		std::swap(m_data_address_wrapped_type, other.m_data_address_wrapped_type);
+
+		return *this;
+	}
+
 };
 
 } // end namespace detail

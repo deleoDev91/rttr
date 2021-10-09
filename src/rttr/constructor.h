@@ -269,6 +269,22 @@ class RTTR_API constructor
          */
         variant invoke_variadic(std::vector<argument> args) const;
 
+		/*!
+		* \brief Invokes the constructor of type returned by \ref get_instantiated_type().
+		*        The instance will always be created at the address \p pos specified and will be returned as variant object.
+		*         Use this method when you need to instantiate a constructor with more then 6 parameters.
+		*
+		* \remark The given argument type has to match **exactly** the type of the underling constructor parameter,
+		*         otherwise the constructor cannot be invoked and an invalid \ref variant object (see \ref variant::is_valid)
+		*         will be returned.
+		*         Using this invoke function is slower, then specifying the arguments directly.
+		*
+		* \see get_parameter_infos()
+		*
+		* \return An instance of the type \ref get_instantiated_type().
+		*/
+		variant invoke_allocated_variadic(void* pos, std::vector<argument> args) const;
+
         /*!
          * \brief Returns true if this constructor is the same like the \p other.
          *

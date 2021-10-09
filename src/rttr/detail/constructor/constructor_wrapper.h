@@ -162,10 +162,24 @@ class constructor_wrapper<Class_Type, class_ctor, Acc_Level, Policy,
                 return variant();
         }
 
+		template<std::size_t ...I>
+		static RTTR_INLINE variant invoke_allocated_variadic_impl(void* pos, const std::vector<argument>& arg_list, index_sequence<I...>)
+		{
+			if (arg_list.size() == sizeof...(I))
+				return invoker_class::invoke_allocated(pos, arg_list[I]...);
+			else
+				return variant();
+		}
+
         variant invoke_variadic(std::vector<argument>& arg_list) const
         {
             return invoke_variadic_impl(arg_list, make_index_sequence<sizeof...(Ctor_Args)>());
         }
+
+		variant invoke_allocated_variadic(void* pos, std::vector<argument>& arg_list) const
+		{
+			return invoke_allocated_variadic_impl(pos , arg_list, make_index_sequence<sizeof...(Ctor_Args)>());
+		}
 
         void visit(visitor& visitor, const constructor& ctor) const RTTR_NOEXCEPT
         {
@@ -351,10 +365,24 @@ class constructor_wrapper<Class_Type, class_ctor, Acc_Level, Policy,
                 return variant();
         }
 
+		template<std::size_t ...I>
+		static RTTR_INLINE variant invoke_allocated_variadic_impl(void* pos, const std::vector<argument>& arg_list, index_sequence<I...>)
+		{
+			if (arg_list.size() == sizeof...(I))
+				return invoker_class::invoke_allocated(pos, arg_list[I]...);
+			else
+				return variant();
+		}
+
         variant invoke_variadic(std::vector<argument>& arg_list) const
         {
             return invoke_variadic_impl(arg_list, make_index_sequence<sizeof...(Ctor_Args)>());
         }
+
+		variant invoke_allocated_variadic(void* pos, std::vector<argument>& arg_list) const
+		{
+			return invoke_allocated_variadic_impl(pos, arg_list, make_index_sequence<sizeof...(Ctor_Args)>());
+		}
 
         void visit(visitor& visitor, const constructor& ctor) const RTTR_NOEXCEPT
         {

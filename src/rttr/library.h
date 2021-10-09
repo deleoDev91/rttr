@@ -100,6 +100,8 @@ class RTTR_API library
 {
 public:
 
+	library() = default;
+
     /*!
      * \brief Constructs a library instance that will load the given library \p `file_name` and
      *        an optional version number \p version.
@@ -122,6 +124,9 @@ public:
 
     library(const library&) = delete;
     library& operator=(const library&) = delete;
+
+	library(library&& other);
+	library& operator=(library&& other);
 
      /*!
       * \brief Loads the library and returns `true`; otherwise `false.`
@@ -209,6 +214,14 @@ public:
       * \see method
       */
      array_range<method> get_global_methods() const RTTR_NOEXCEPT;
+
+	 /*!
+	 * \brief Checks if library is the same
+	 *
+	 * \return true if library is same as compared one, otherwise false
+	 */
+	 bool operator==(const library &other) const RTTR_NOEXCEPT;
+	 
 
 private:
     std::shared_ptr<detail::library_private> m_pimpl;
