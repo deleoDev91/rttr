@@ -109,17 +109,10 @@ class library_manager
 /////////////////////////////////////////////////////////////////////////////////////////
 
 library::library(string_view file_name, string_view version)
-:   m_pimpl(detail::library_manager::create_or_find_library(file_name, version))
+:   m_pimpl(detail::library_manager::create_or_find_library(file_name, version)),
+    m_is_loaded(false)
 {
-	m_is_loaded = m_pimpl->is_loaded();
-}
 
-/////////////////////////////////////////////////////////////////////////////////////////
-
-library::library(library&& other)
-{
-	m_is_loaded = other.m_is_loaded;
-	m_pimpl = std::move(other.m_pimpl);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -139,9 +132,8 @@ bool library::load()
     if (m_is_loaded)
         return m_pimpl->is_loaded();
 
-	bool result = m_pimpl->load();
-    m_is_loaded = m_pimpl->is_loaded();
-    return result;
+    m_is_loaded = true;
+    return m_pimpl->load();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -150,9 +142,8 @@ bool library::unload()
 {
     if (m_is_loaded)
     {
-		bool result = m_pimpl->unload();
         m_is_loaded = false;
-        return result;
+        return m_pimpl->unload();
     }
     else
     {
@@ -164,7 +155,7 @@ bool library::unload()
 
 bool library::is_loaded() const RTTR_NOEXCEPT
 {
-    return m_is_loaded;
+    return m_pimpl->is_loaded();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -201,22 +192,6 @@ array_range<property> library::get_global_properties() const RTTR_NOEXCEPT
 array_range<method> library::get_global_methods() const RTTR_NOEXCEPT
 {
     return m_pimpl->get_global_methods();
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////
-
-library& library::operator=(library&& other)
-{
-	m_pimpl = std::move(other.m_pimpl);
-	m_is_loaded = other.m_is_loaded;
-	return *this;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////
-
-bool library::operator==(const library &other) const RTTR_NOEXCEPT
-{
-	return m_pimpl == other.m_pimpl;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

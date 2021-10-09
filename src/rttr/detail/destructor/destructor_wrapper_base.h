@@ -56,8 +56,6 @@ class RTTR_API destructor_wrapper_base
         virtual type get_declaring_type() const RTTR_NOEXCEPT;
         virtual type get_destructed_type() const RTTR_NOEXCEPT;
         virtual bool invoke(variant& obj) const RTTR_NOEXCEPT;
-		virtual bool invoke_method_only(variant& obj) const RTTR_NOEXCEPT;
-		virtual bool is_trivially_destructible() const RTTR_NOEXCEPT;
 };
 
 } // end namespace detail
