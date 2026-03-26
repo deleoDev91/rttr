@@ -36,7 +36,6 @@
 #include <utility>
 #include <functional>
 #include <algorithm>
-#include <ciso646> // _LIBCPP_VERSION
 
 namespace rttr
 {
@@ -161,11 +160,8 @@ class flat_map
             else
                 return (m_value_list.cend());
         }
-#ifdef _LIBCPP_VERSION
-#   if _LIBCPP_VERSION <= 3700
-#       define RTTR_NO_CXX11_CONST_EREASE_SUPPORT_IN_STL 1
-#   endif
-#elif (RTTR_COMPILER == RTTR_COMPILER_GNUC && RTTR_COMP_VER < 490)
+
+#if (RTTR_COMPILER == RTTR_COMPILER_GNUC && RTTR_COMP_VER < 490)
 #   define RTTR_NO_CXX11_CONST_EREASE_SUPPORT_IN_STL 1
 #endif
 
