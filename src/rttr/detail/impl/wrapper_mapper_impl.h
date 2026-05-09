@@ -48,12 +48,12 @@ struct wrapper_mapper<std::shared_ptr<T>>
     using wrapped_type = decltype(std::shared_ptr<T>().get());
     using type = std::shared_ptr<T>;
 
-    static RTTR_INLINE wrapped_type get(const type& obj)
+    static wrapped_type get(const type& obj)
     {
         return obj.get();
     }
 
-    static RTTR_INLINE type create(const wrapped_type& t)
+    static type create(const wrapped_type& t)
     {
         return type(t);
     }
@@ -69,7 +69,7 @@ struct wrapper_mapper<std::shared_ptr<T>>
         else
         {
             ok = false;
-            return std::shared_ptr<U>();
+            return nullptr;
         }
     }
 };
@@ -82,16 +82,18 @@ struct wrapper_mapper<std::reference_wrapper<T>>
     using wrapped_type  = decltype(std::declval<std::reference_wrapper<T>>().get());
     using type          = std::reference_wrapper<T>;
 
-    static RTTR_INLINE wrapped_type get(const type& obj)
+    static wrapped_type get(const type& obj)
     {
         return obj.get();
     }
 
-    static RTTR_INLINE type create(const wrapped_type& t)
-    {
-        return type(t);
-    }
+    static type create(T& t);
 };
+template<typename T>
+typename wrapper_mapper<std::reference_wrapper<T>>::type wrapper_mapper<std::reference_wrapper<T>>::create(T& t)
+{
+    return std::ref(t);
+}
 
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -101,12 +103,12 @@ struct wrapper_mapper<std::unique_ptr<T>>
     using wrapped_type  = decltype(std::declval<std::unique_ptr<T>>().get());
     using type          = std::unique_ptr<T>;
 
-    static RTTR_INLINE wrapped_type get(const type& obj)
+    static wrapped_type get(const type& obj)
     {
         return obj.get();
     }
 
-    static RTTR_INLINE type create(const wrapped_type& t)
+    static type create(T* t)
     {
         return type(t);
     }
@@ -120,7 +122,7 @@ struct wrapper_mapper<std::weak_ptr<T>>
     using wrapped_type  = decltype(std::declval<std::weak_ptr<T>>().lock().get());
     using type          = std::weak_ptr<T>;
 
-    static RTTR_INLINE wrapped_type get(const type& obj)
+    static wrapped_type get(const type& obj)
     {
         return obj.lock().get();
     }
