@@ -151,6 +151,13 @@ public:
      */
     RTTR_INLINE type get_derived_type() const RTTR_NOEXCEPT;
 
+    /*!
+    * \brief Returns stored raw ptr.
+    *
+    * \return Stored raw ptr.
+    */
+    RTTR_INLINE void* get_ptr() const RTTR_NOEXCEPT;
+
 	/*!
 	* \brief Copy an instance.
 	*/
